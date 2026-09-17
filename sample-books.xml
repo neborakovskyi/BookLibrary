@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Books>
+  <Book>
+    <Name>The Little Mermaid</Name>
+    <Author>Andersen</Author>
+    <Pages>48</Pages>
+  </Book>
+  <Book>
+    <Name>The Ugly Duckling</Name >
+    <Author>Andersen</Author>
+    <Pages>32</Pages>
+  </Book>
+  <Book>
+    <Name>Thumbelina</Name>
+    <Author>Andersen</Author>
+    <Pages>40</Pages>
+  </Book>
+  <Book>
+    <Name>It</Name>
+    <Author>King</Author>
+    <Pages>1138</Pages>
+  </Book>
+  <Book>
+    <Name>Carrie</Name>
+    <Author>King</Author>
+    <Pages>253</Pages>
+  </Book>
+  <Book>
+    <Name>Dracula</Name>
+    <Author>Stoker</Author>
+    <Pages>418</Pages>
+  </Book>
+</Books>
