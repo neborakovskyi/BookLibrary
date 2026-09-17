@@ -1,6 +1,6 @@
 # BookLibrary
 
-A C# / .NET 8 class library for managing a book collection with XML persistence.  
+A C# / .NET 10 class library for managing a book collection with XML persistence.  
 Built with **SOLID principles**, **async/await file I/O**, **custom exceptions** and **xUnit tests**.
 
 ---
@@ -10,6 +10,8 @@ Built with **SOLID principles**, **async/await file I/O**, **custom exceptions**
 ```
 BookLibrary.sln
 ├── BookLibrary/
+│   ├── BookCollection.cs               ← in-memory collection with add/sort/search/XML methods
+│   ├── Book.cs                         ← model used by the collection and repository
 │   ├── Exceptions/
 │   │   ├── BookLibraryException.cs      ← base exception
 │   │   ├── BookValidationException.cs   ← invalid field values
@@ -27,12 +29,17 @@ BookLibrary.sln
 │       ├── BookSortService.cs           ← Author → Name sort
 │       ├── BookSearchService.cs         ← substring title search
 │       └── BookCollectionService.cs     ← facade / DI root
-└── BookLibrary.Tests/
-    ├── BookTests.cs
-    ├── XmlBookRepositoryTests.cs
-    ├── BookSortServiceTests.cs
-    ├── BookSearchServiceTests.cs
-    └── BookCollectionServiceTests.cs    ← NSubstitute mocks
+├── BookLibrary.Tests/
+│   ├── BookCollectionTests.cs
+│   ├── BookCollectionServiceTests.cs
+│   ├── BookTests.cs
+│   ├── XmlBookRepositoryTests.cs
+│   ├── BookSortServiceTests.cs
+│   ├── BookSearchServiceTests.cs
+│   └── PerformanceTests.cs
+├── sample-books.xml                    ← example XML dataset
+├── README.md
+└── BookLibrary.csproj
 ```
 
 ---
@@ -51,11 +58,10 @@ BookLibrary.sln
 
 ## Async / await
 
-`XmlBookRepository` uses:
-- `File.ReadAllTextAsync` — non-blocking read  
-- `FileStream` with `useAsync: true` + `XmlWriter` with `Async = true` + `WriteToAsync` — non-blocking write  
-- Write-to-temp-then-atomic-`File.Move` — prevents corruption on cancellation  
-- `CancellationToken` flows through every async method
+`XmlBookRepository` and the collection facade use asynchronous patterns where appropriate:
+- `LoadAsync` and `SaveAsync` support cancellation tokens
+- file I/O is non-blocking when writing/reading XML
+- the in-memory collection returns defensive snapshots so earlier reads remain stable even after later mutations
 
 ---
 
@@ -90,7 +96,6 @@ var service    = new BookCollectionService(
     new BookSortService(),
     new BookSearchService());
 
-// Use via interface only
 IBookCollectionService lib = service;
 
 await lib.LoadAsync();
@@ -99,6 +104,11 @@ lib.Sort();
 
 var results = lib.SearchByTitle("snow");
 await lib.SaveAsync();
+
+// Snapshot semantics: a previously captured Books list does not change
+var snapshot = lib.Books;
+lib.Add("The Little Mermaid", "Andersen", 48);
+// snapshot still contains only the original items
 ```
 
 ---
