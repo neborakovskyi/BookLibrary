@@ -33,7 +33,9 @@ public sealed class XmlBookRepository : IBookRepository
     public XmlBookRepository(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))
+        {
             throw new ArgumentException("File path must not be null or whitespace.", nameof(filePath));
+        }
 
         _filePath = filePath;
     }
@@ -46,8 +48,9 @@ public sealed class XmlBookRepository : IBookRepository
     public async Task<IReadOnlyList<Book>> LoadAsync(CancellationToken cancellationToken = default)
     {
         if (!File.Exists(_filePath))
-            throw new BookPersistenceException(_filePath,
-                $"XML file not found: '{_filePath}'.");
+        {
+            throw new BookPersistenceException(_filePath, $"XML file not found: '{_filePath}'.");
+        }
 
         string xml;
         try
@@ -138,7 +141,7 @@ public sealed class XmlBookRepository : IBookRepository
         var books = new List<Book>();
         foreach (var el in doc.Root.Elements("Book"))
         {
-            var title    = RequiredText(el, "Name");
+            var name     = RequiredText(el, "Name");
             var author   = RequiredText(el, "Author");
             var pagesRaw = RequiredText(el, "Pages");
 
@@ -147,7 +150,7 @@ public sealed class XmlBookRepository : IBookRepository
                     $"<Pages> must be a positive integer; got '{pagesRaw}' in '{_filePath}'.");
 
             // BookValidationException can also propagate here — intentional
-            books.Add(new Book(title, author, pages));
+            books.Add(new Book(name, author, pages));
         }
 
         return books.AsReadOnly();

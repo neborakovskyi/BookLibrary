@@ -4,9 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <IsPackable>false</IsPackable>
-    <!-- Release build gives realistic numbers; Debug is fine for CI -->
-    <Optimize>true</Optimize>
+    <IsPackable>false</IsPackable>    
   </PropertyGroup>
 
   <ItemGroup>

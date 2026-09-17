@@ -70,10 +70,10 @@ public sealed class BookTests
     // ── With* helpers ─────────────────────────────────────────────────
 
     [Fact]
-    public void WithTitle_ReturnsNewInstanceWithUpdatedTitle()
+    public void WithName_ReturnsNewInstanceWithUpdatedName()
     {
-        var original = new Models.Book("Old", "Author", 100);
-        var updated  = original.WithTitle("New");
+        var original = new Book("Old", "Author", 100);
+        var updated  = original.WithName("New");
 
         Assert.Equal("New",    updated.Name);
         Assert.Equal("Author", updated.Author);
@@ -84,7 +84,7 @@ public sealed class BookTests
     [Fact]
     public void WithAuthor_ReturnsNewInstanceWithUpdatedAuthor()
     {
-        var original = new Models.Book("Name", "Old", 100);
+        var original = new Book("Name", "Old", 100);
         var updated  = original.WithAuthor("New");
 
         Assert.Equal("New", updated.Author);
@@ -94,7 +94,7 @@ public sealed class BookTests
     [Fact]
     public void WithPages_ReturnsNewInstanceWithUpdatedPages()
     {
-        var original = new Models.Book("Name", "Author", 100);
+        var original = new Book("Name", "Author", 100);
         var updated  = original.WithPages(200);
 
         Assert.Equal(200, updated.Pages);
@@ -102,18 +102,18 @@ public sealed class BookTests
     }
 
     [Fact]
-    public void WithTitle_InvalidValue_ThrowsBookValidationException()
+    public void WithName_InvalidValue_ThrowsBookValidationException()
     {
-        var book = new Models.Book("Name", "Author", 100);
-        Assert.Throws<BookValidationException>(() => book.WithTitle(""));
+        var book = new Book("Name", "Author", 100);
+        Assert.Throws<BookValidationException>(() => book.WithName(""));
     }
 
     // ── ToString ──────────────────────────────────────────────────────
 
     [Fact]
-    public void ToString_ContainsAuthorTitleAndPages()
+    public void ToString_ContainsAuthorNameAndPages()
     {
-        var str = new Models.Book("It", "King", 1138).ToString();
+        var str = new Book("It", "King", 1138).ToString();
         Assert.Contains("King", str);
         Assert.Contains("It",   str);
         Assert.Contains("1138", str);

@@ -106,7 +106,7 @@ public sealed class XmlBookRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task LoadAsync_MissingTitleElement_ThrowsBookPersistenceException()
+    public async Task LoadAsync_MissingNameElement_ThrowsBookPersistenceException()
     {
         var path = TempFile();
         Write(path, "<Books><Book><Author>King</Author><Pages>100</Pages></Book></Books>");

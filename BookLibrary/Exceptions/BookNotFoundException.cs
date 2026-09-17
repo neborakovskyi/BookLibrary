@@ -3,7 +3,7 @@ namespace BookLibrary.Exceptions;
 /// <summary>
 /// Thrown when a lookup operation finds no matching book.
 /// Callers that expect a nullable result should use
-/// <see cref="Interfaces.IBookSearchService.SearchByTitle"/> instead.
+/// <see cref="Interfaces.IBookSearchService.SearchByName"/> instead.
 /// </summary>
 public sealed class BookNotFoundException : BookLibraryException
 {

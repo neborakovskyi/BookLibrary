@@ -183,11 +183,11 @@ public sealed class PerformanceTests : IAsyncLifetime
 
         var searcher = new BookSearchService();
 
-        // "Chronicles" appears in every 200th title template slot → ~5 000 hits
+        // "Chronicles" appears in every 200th name template slot → ~5 000 hits
         int    hits    = 0;
         var    elapsed = Measure("Search 1M ('Chronicles')", () =>
         {
-            var results = searcher.SearchByTitle(books, "Chronicles");
+            var results = searcher.SearchByName(books, "Chronicles");
             hits = results.Count;
             Assert.All(results, b =>
                 Assert.Contains("Chronicles", b.Name, StringComparison.OrdinalIgnoreCase));

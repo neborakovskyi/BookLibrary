@@ -138,7 +138,7 @@ public sealed class BookCollectionServiceTests
     public void Add_InvalidBook_ThrowsBookValidationException()
     {
         var svc = Build();
-        Assert.Throws<BookValidationException>(() => svc.Add("", "Author", 10));
+        Assert.Throws<BookValidationException>(() => svc.Add(new Book("", "Author", 10)));
     }
 
     // ── Clear ─────────────────────────────────────────────────────────
@@ -190,33 +190,33 @@ public sealed class BookCollectionServiceTests
         Assert.Equal("King", svc.Books[0].Author);
     }
 
-    // ── SearchByTitle ─────────────────────────────────────────────────
+    // ── SearchByName ─────────────────────────────────────────────────
 
     [Fact]
-    public void SearchByTitle_DelegatesToSearcher()
+    public void SearchByName_DelegatesToSearcher()
     {
         var svc = Build();
         svc.Add(BookA);
 
-        _searcher.SearchByTitle(Arg.Any<IEnumerable<Book>>(), "mermaid")
+        _searcher.SearchByName(Arg.Any<IEnumerable<Book>>(), "mermaid")
                  .Returns(new[] { BookA });
 
-        var result = svc.SearchByTitle("mermaid");
+        var result = svc.SearchByName("mermaid");
 
         _searcher.Received(1)
-                 .SearchByTitle(Arg.Any<IEnumerable<Book>>(), "mermaid");
+                 .SearchByName(Arg.Any<IEnumerable<Book>>(), "mermaid");
         Assert.Single(result);
     }
 
     [Fact]
-    public void SearchByTitle_SearcherThrows_PropagatesException()
+    public void SearchByName_SearcherThrows_PropagatesException()
     {
         var svc = Build();
-        _searcher.SearchByTitle(Arg.Any<IEnumerable<Book>>(), Arg.Any<string>())
+        _searcher.SearchByName(Arg.Any<IEnumerable<Book>>(), Arg.Any<string>())
                  .Returns<IReadOnlyList<Book>>(_ =>
                      throw new ArgumentException("blank term"));
 
-        Assert.Throws<ArgumentException>(() => svc.SearchByTitle("   "));
+        Assert.Throws<ArgumentException>(() => svc.SearchByName("   "));
     }
 
     // ── Books snapshot ────────────────────────────────────────────────

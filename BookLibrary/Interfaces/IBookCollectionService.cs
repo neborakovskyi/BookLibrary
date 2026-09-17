@@ -26,7 +26,7 @@ public interface IBookCollectionService
     void Add(Book book);
 
     /// <summary>Convenience overload: constructs and adds a book.</summary>
-    void Add(string title, string author, int pages);
+    void Add(string name, string author, int pages);
 
     /// <summary>Removes all books from the in-memory list.</summary>
     void Clear();
@@ -44,8 +44,8 @@ public interface IBookCollectionService
     void Sort();
 
     /// <summary>
-    /// Returns books whose title contains <paramref name="titlePart"/>
+    /// Returns books whose name contains <paramref name="namePart"/>
     /// (case-insensitive substring).
     /// </summary>
-    IReadOnlyList<Book> SearchByTitle(string titlePart);
+    IReadOnlyList<Book> SearchByName(string namePart);
 }

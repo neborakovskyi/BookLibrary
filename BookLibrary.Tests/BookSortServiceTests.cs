@@ -9,7 +9,7 @@ public sealed class BookSortServiceTests
     private readonly BookSortService _sut = new();
 
     [Fact]
-    public void Sort_OrdersByAuthorThenTitle()
+    public void Sort_OrdersByAuthorThenName()
     {
         var input = new[]
         {
@@ -45,7 +45,7 @@ public sealed class BookSortServiceTests
     }
 
     [Fact]
-    public void Sort_IsCaseInsensitiveOnTitle()
+    public void Sort_IsCaseInsensitiveOnName()
     {
         var input = new[]
         {

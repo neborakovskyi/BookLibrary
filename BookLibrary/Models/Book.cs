@@ -22,11 +22,11 @@ public sealed class Book
     public int    Pages  { get; }
 
     /// <exception cref="BookValidationException">
-    /// Thrown for blank title / author or non-positive page count.
+    /// Thrown for blank name / author or non-positive page count.
     /// </exception>
-    public Book(string title, string author, int pages)
+    public Book(string name, string author, int pages)
     {
-        if (string.IsNullOrWhiteSpace(title))
+        if (string.IsNullOrWhiteSpace(name))
             throw new BookValidationException(nameof(Name),
                 "Name must not be null or whitespace.");
 
@@ -38,18 +38,18 @@ public sealed class Book
             throw new BookValidationException(nameof(Pages),
                 $"Pages must be greater than zero; got {pages}.");
 
-        Name  = title.Trim();
+        Name  = name.Trim();
         Author = author.Trim();
         Pages  = pages;
     }
 
     // Non-destructive "edit" helpers (ISP: callers only touch what they need)
     /// <summary>
-    /// Creates a new book instance with the specified title.
+    /// Creates a new book instance with the specified name.
     /// </summary>
-    /// <param name="title">The title of the book.</param>
-    /// <returns>A new book instance with the specified title.</returns>
-    public Book WithTitle(string title)   => new(title, Author, Pages);
+    /// <param name="name">The name of the book.</param>
+    /// <returns>A new book instance with the specified name.</returns>
+    public Book WithName(string name)   => new(name, Author, Pages);
     /// <summary>
     /// Creates a new book instance with the specified author.
     /// </summary>

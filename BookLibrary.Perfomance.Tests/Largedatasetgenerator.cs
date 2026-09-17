@@ -8,7 +8,7 @@ namespace BookLibrary.PerformanceTests;
 /// book records, using a streaming <see cref="XmlWriter"/> so the full DOM
 /// is never held in memory at once.
 ///
-/// Authors are drawn from a pool of 50 realistic names; titles from 200
+/// Authors are drawn from a pool of 50 realistic names; names from 200
 /// templates. This produces a realistic skewed distribution (multiple books
 /// per author) rather than 1 M unique strings, which exercises sort and
 /// search more faithfully.
@@ -17,7 +17,7 @@ public static class LargeDatasetGenerator
 {
     public const int DefaultCount = 1_000_000;
 
-    // ── Author / title pools ──────────────────────────────────────────
+    // ── Author / name pools ──────────────────────────────────────────
 
     private static readonly string[] Authors =
     {
@@ -33,7 +33,7 @@ public static class LargeDatasetGenerator
         "Remarque", "Steinbeck", "Stoker", "Tolstoy", "Woolf"
     };
 
-    private static readonly string[] TitleTemplates =
+    private static readonly string[] NameTemplates =
     {
         "The {0} Chronicles",    "A {0} in the Dark",      "Beyond the {0}",
         "The Last {0}",          "Return of the {0}",       "Shadow of {0}",
@@ -102,7 +102,7 @@ public static class LargeDatasetGenerator
         "The {0} Prelude",       "Builders of {0}",         "The {0} Conclusion"
     };
 
-    private static readonly string[] TitleWords =
+    private static readonly string[] NameWords =
     {
         "Darkness", "Light", "Fire", "Ice", "Storm", "Earth", "Sky",
         "Sea", "Star", "Moon", "Sun", "Wind", "Rain", "Thunder",
@@ -159,11 +159,11 @@ public static class LargeDatasetGenerator
             cancellationToken.ThrowIfCancellationRequested();
 
             var author = Authors[i % Authors.Length];
-            var title  = BuildTitle(i);
+            var name   = BuildName(i);
             var pages  = 50 + (i % 950);   // 50 … 999
 
             await writer.WriteStartElementAsync(null, "Book",   null).ConfigureAwait(false);
-            await writer.WriteElementStringAsync(null, "Name",  null, title) .ConfigureAwait(false);
+            await writer.WriteElementStringAsync(null, "Name",  null, name) .ConfigureAwait(false);
             await writer.WriteElementStringAsync(null, "Author", null, author).ConfigureAwait(false);
             await writer.WriteElementStringAsync(null, "Pages",  null, pages.ToString()).ConfigureAwait(false);
             await writer.WriteEndElementAsync().ConfigureAwait(false);   // </Book>
@@ -176,10 +176,10 @@ public static class LargeDatasetGenerator
 
     // ── Helpers ───────────────────────────────────────────────────────
 
-    private static string BuildTitle(int i)
+    private static string BuildName(int i)
     {
-        var template = TitleTemplates[i % TitleTemplates.Length];
-        var word     = TitleWords[(i / TitleTemplates.Length) % TitleWords.Length];
+        var template = NameTemplates[i % NameTemplates.Length];
+        var word     = NameWords[(i / NameTemplates.Length) % NameWords.Length];
         return string.Format(template, word);
     }
 }

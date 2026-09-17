@@ -16,46 +16,46 @@ public sealed class BookSearchServiceTests
     };
 
     [Fact]
-    public void SearchByTitle_ExactMatch_ReturnsBook()
+    public void SearchByName_ExactMatch_ReturnsBook()
     {
-        var result = _sut.SearchByTitle(Library, "It");
+        var result = _sut.SearchByName(Library, "It");
         Assert.Single(result);
         Assert.Equal("It", result[0].Name);
     }
 
     [Fact]
-    public void SearchByTitle_SubstringMatch_ReturnsBook()
+    public void SearchByName_SubstringMatch_ReturnsBook()
     {
-        var result = _sut.SearchByTitle(Library, "Little");
+        var result = _sut.SearchByName(Library, "Little");
         Assert.Single(result);
         Assert.Equal("The Little Mermaid", result[0].Name);
     }
 
     [Fact]
-    public void SearchByTitle_IsCaseInsensitive()
+    public void SearchByName_IsCaseInsensitive()
     {
-        var result = _sut.SearchByTitle(Library, "LITTLE");
+        var result = _sut.SearchByName(Library, "LITTLE");
         Assert.Single(result);
     }
 
     [Fact]
-    public void SearchByTitle_MultipleMatches_ReturnsAll()
+    public void SearchByName_MultipleMatches_ReturnsAll()
     {
-        var result = _sut.SearchByTitle(Library, "The");
+        var result = _sut.SearchByName(Library, "The");
         Assert.Equal(2, result.Count);
     }
 
     [Fact]
-    public void SearchByTitle_NoMatch_ReturnsEmptyList()
+    public void SearchByName_NoMatch_ReturnsEmptyList()
     {
-        var result = _sut.SearchByTitle(Library, "Dracula");
+        var result = _sut.SearchByName(Library, "Dracula");
         Assert.Empty(result);
     }
 
     [Fact]
-    public void SearchByTitle_TrimsSearchTerm()
+    public void SearchByName_TrimsSearchTerm()
     {
-        var result = _sut.SearchByTitle(Library, "  Little  ");
+        var result = _sut.SearchByName(Library, "  Little  ");
         Assert.Single(result);
     }
 
@@ -63,21 +63,21 @@ public sealed class BookSearchServiceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void SearchByTitle_BlankTerm_ThrowsArgumentException(string? bad)
+    public void SearchByName_BlankTerm_ThrowsArgumentException(string? bad)
     {
-        Assert.Throws<ArgumentException>(() => _sut.SearchByTitle(Library, bad!));
+        Assert.Throws<ArgumentException>(() => _sut.SearchByName(Library, bad!));
     }
 
     [Fact]
-    public void SearchByTitle_NullBooks_ThrowsArgumentNullException()
+    public void SearchByName_NullBooks_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => _sut.SearchByTitle(null!, "term"));
+        Assert.Throws<ArgumentNullException>(() => _sut.SearchByName(null!, "term"));
     }
 
     [Fact]
-    public void SearchByTitle_EmptyCollection_ReturnsEmpty()
+    public void SearchByName_EmptyCollection_ReturnsEmpty()
     {
-        var result = _sut.SearchByTitle(Array.Empty<Book>(), "term");
+        var result = _sut.SearchByName(Array.Empty<Book>(), "term");
         Assert.Empty(result);
     }
 }

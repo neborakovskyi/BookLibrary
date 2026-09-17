@@ -57,8 +57,8 @@ public sealed class BookCollectionService : IBookCollectionService
     }
 
     /// <inheritdoc/>
-    public void Add(string title, string author, int pages) =>
-        Add(new Book(title, author, pages));
+    public void Add(string name, string author, int pages) =>
+        Add(new Book(name, author, pages));
 
     /// <inheritdoc/>
     public void Clear() => _books.Clear();
@@ -75,6 +75,6 @@ public sealed class BookCollectionService : IBookCollectionService
     }
 
     /// <inheritdoc/>
-    public IReadOnlyList<Book> SearchByTitle(string titlePart) =>
-        _searcher.SearchByTitle(_books, titlePart);
+    public IReadOnlyList<Book> SearchByName(string namePart) =>
+        _searcher.SearchByName(_books, namePart);
 }
