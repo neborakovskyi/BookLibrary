@@ -27,7 +27,7 @@ BookLibrary.sln
 │   └── Services/
 │       ├── XmlBookRepository.cs         ← async XML file I/O
 │       ├── BookSortService.cs           ← Author → Name sort
-│       ├── BookSearchService.cs         ← substring title search
+│       ├── BookSearchService.cs         ← substring Name search
 │       └── BookCollectionService.cs     ← facade / DI root
 ├── BookLibrary.Tests/
 │   ├── BookCollectionTests.cs
@@ -70,7 +70,7 @@ BookLibrary.sln
 | Exception | When thrown |
 |---|---|
 | `BookLibraryException` | Base class — catch this to handle *any* library error |
-| `BookValidationException` | Blank title/author or non-positive page count; carries `FieldName` |
+| `BookValidationException` | Blank name/author or non-positive page count; carries `FieldName` |
 | `BookPersistenceException` | File not found, malformed XML, missing element; carries `FilePath` |
 | `BookNotFoundException` | Reserved for single-result lookups that find nothing |
 
@@ -102,7 +102,7 @@ await lib.LoadAsync();
 lib.Add("The Snow Queen", "Andersen", 80);
 lib.Sort();
 
-var results = lib.SearchByTitle("snow");
+var results = lib.SearchByName("snow");
 await lib.SaveAsync();
 
 // Snapshot semantics: a previously captured Books list does not change
