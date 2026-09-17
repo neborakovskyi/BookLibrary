@@ -14,7 +14,8 @@ public sealed class BookCollectionService : IBookCollectionService
     private readonly IBookRepository    _repository;
     private readonly IBookSortService   _sorter;
     private readonly IBookSearchService _searcher;
-    private readonly List<Book>         _books = new();
+    private readonly List<Book>         _books      = new();
+    private IReadOnlyList<Book>         _booksCache = new List<Book>().AsReadOnly();
 
     /// <summary>
     /// Creates the service with its three collaborators.
@@ -35,7 +36,7 @@ public sealed class BookCollectionService : IBookCollectionService
     // ── IBookCollectionService ────────────────────────────────────────
 
     /// <inheritdoc/>
-    public IReadOnlyList<Book> Books => new List<Book>(_books).AsReadOnly();
+    public IReadOnlyList<Book> Books => _booksCache;
 
     /// <inheritdoc/>
     public async Task LoadAsync(CancellationToken cancellationToken = default)
@@ -43,6 +44,7 @@ public sealed class BookCollectionService : IBookCollectionService
         var loaded = await _repository.LoadAsync(cancellationToken).ConfigureAwait(false);
         _books.Clear();
         _books.AddRange(loaded);
+        UpdateCache();
     }
 
     /// <inheritdoc/>
@@ -54,6 +56,7 @@ public sealed class BookCollectionService : IBookCollectionService
     {
         ArgumentNullException.ThrowIfNull(book);
         _books.Add(book);
+        UpdateCache();
     }
 
     /// <inheritdoc/>
@@ -61,7 +64,11 @@ public sealed class BookCollectionService : IBookCollectionService
         Add(new Book(name, author, pages));
 
     /// <inheritdoc/>
-    public void Clear() => _books.Clear();
+    public void Clear() 
+    {
+        _books.Clear();
+        UpdateCache();
+    }
 
     /// <inheritdoc/>
     public IReadOnlyList<Book> GetSorted() => _sorter.Sort(_books);
@@ -72,9 +79,14 @@ public sealed class BookCollectionService : IBookCollectionService
         var sorted = _sorter.Sort(_books);
         _books.Clear();
         _books.AddRange(sorted);
+        UpdateCache();
     }
 
     /// <inheritdoc/>
     public IReadOnlyList<Book> SearchByName(string namePart) =>
         _searcher.SearchByName(_books, namePart);
+
+    private void UpdateCache() =>    
+        _booksCache = new List<Book>(_books).AsReadOnly();
+    
 }
